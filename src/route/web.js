@@ -11,6 +11,7 @@ import commentController from '../controllers/commentController';
 import shopCartController from '../controllers/shopCartController';
 import orderController from '../controllers/orderController';
 import addressUserController from '../controllers/addressUserController';
+import messageController from '../controllers/messageController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -106,6 +107,11 @@ let initwebRoutes = (app) => {
      router.post('/api/reply-review', middlewareControllers.verifyTokenAdmin, commentController.ReplyReview)
      router.get('/api/get-all-review-by-productId', commentController.getAllReviewByProductId)
      router.delete('/api/delete-review', middlewareControllers.verifyTokenUser, commentController.deleteReview)
+     //==================API COMMENT============================//
+    router.post('/api/create-new-comment', middlewareControllers.verifyTokenUser, commentController.createNewComment)
+    router.post('/api/reply-comment', middlewareControllers.verifyTokenAdmin, commentController.ReplyComment)
+    router.get('/api/get-all-comment-by-blogId', commentController.getAllCommentByBlogId)
+    router.delete('/api/delete-comment', middlewareControllers.verifyTokenUser, commentController.deleteComment)
      //=================API SHOPCART==========================//
     router.post('/api/add-shopcart', middlewareControllers.verifyTokenUser, shopCartController.addShopCart)
     router.get('/api/get-all-shopcart-by-userId', middlewareControllers.verifyTokenUser, shopCartController.getAllShopCartByUserId)
@@ -130,6 +136,12 @@ let initwebRoutes = (app) => {
     router.delete('/api/delete-address-user', middlewareControllers.verifyTokenUser, addressUserController.deleteAddressUser)
     router.put('/api/edit-address-user', middlewareControllers.verifyTokenUser, addressUserController.editAddressUser)
     router.get('/api/get-detail-address-user-by-id', middlewareControllers.verifyTokenUser, addressUserController.getDetailAddressUserById)
+     //=================API MESSAGE============================//
+     router.post('/api/create-new-room', middlewareControllers.verifyTokenUser, messageController.createNewRoom)
+     router.post('/api/sendMessage', middlewareControllers.verifyTokenUser, messageController.sendMessage)
+     router.get('/api/loadMessage', middlewareControllers.verifyTokenUser, messageController.loadMessage)
+     router.get('/api/listRoomOfUser', middlewareControllers.verifyTokenUser, messageController.listRoomOfUser)
+     router.get('/api/listRoomOfAdmin', middlewareControllers.verifyTokenAdmin, messageController.listRoomOfAdmin)
     return app.use("/", router);
 }
 
