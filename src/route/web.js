@@ -3,6 +3,7 @@ import middlewareControllers from '../middlewares/jwtVerify';
 import userController from '../controllers/userController';
 import allcodeController from '../controllers/allcodeController';
 import productController from '../controllers/productController';
+import bannerController from '../controllers/bannerController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -58,6 +59,12 @@ let initwebRoutes = (app) => {
     router.get('/api/get-product-new', productController.getProductNew)
     router.get('/api/get-product-shopcart', productController.getProductShopCart)
     router.get('/api/get-product-recommend', productController.getProductRecommend)
+    //==================API BANNER=============================//
+    router.post('/api/create-new-banner', middlewareControllers.verifyTokenAdmin, bannerController.createNewBanner)
+    router.get('/api/get-detail-banner', bannerController.getDetailBanner)
+    router.get('/api/get-all-banner', bannerController.getAllBanner)
+    router.put('/api/update-banner', middlewareControllers.verifyTokenAdmin, bannerController.updateBanner)
+    router.delete('/api/delete-banner', middlewareControllers.verifyTokenAdmin, bannerController.deleteBanner)
     return app.use("/", router);
 }
 
