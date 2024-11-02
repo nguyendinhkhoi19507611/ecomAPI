@@ -452,6 +452,43 @@ let handleSendEmailForgotPassword = (email) => {
         }
     })
 }
+let handleForgotPassword = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.token || !data.password) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            } else {
+                let user = await db.User.findOne({
+                    where: {
+                        id: data.id,
+                        usertoken: data.token
+                    },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    raw: false
+                })
+
+                if (user) {
+                    user.password = await hashUserPasswordFromBcrypt(data.password);
+                    user.usertoken = "";
+
+                    await user.save();
+
+                }
+                resolve({
+                    errCode: 0,
+                    errMessage: 'ok'
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -463,4 +500,5 @@ module.exports = {
     handleSendVerifyEmailUser: handleSendVerifyEmailUser,
     handleVerifyEmailUser: handleVerifyEmailUser,
     handleSendEmailForgotPassword: handleSendEmailForgotPassword,
+    handleForgotPassword: handleForgotPassword,
 }
