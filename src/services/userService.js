@@ -358,6 +358,49 @@ let handleSendVerifyEmailUser = (data) => {
         }
     })
 }
+let handleVerifyEmailUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.token) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            } else {
+                let user = await db.User.findOne({
+                    where: {
+                        id: data.id,
+                        usertoken: data.token
+                    },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    raw: false
+                })
+
+                if (user) {
+                    user.isActiveEmail = 1
+                    user.usertoken = "";
+
+                    await user.save();
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'ok'
+                    })
+
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'User not found!'
+                    })
+                }
+
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -367,4 +410,5 @@ module.exports = {
     getAllUser: getAllUser,
     getDetailUserById: getDetailUserById,
     handleSendVerifyEmailUser: handleSendVerifyEmailUser,
+    handleVerifyEmailUser: handleVerifyEmailUser,
 }

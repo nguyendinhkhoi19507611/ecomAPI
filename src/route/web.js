@@ -16,6 +16,7 @@ let initwebRoutes = (app) => {
     router.get('/api/get-all-user', middlewareControllers.verifyTokenAdmin, userController.getAllUser)
     router.get('/api/get-detail-user-by-id', userController.getDetailUserById)
     router.post('/api/send-verify-email', middlewareControllers.verifyTokenUser, userController.handleSendVerifyEmailUser)
+    router.post('/api/verify-email', middlewareControllers.verifyTokenUser, userController.handleVerifyEmailUser)
     return app.use("/", router);
 }
 
