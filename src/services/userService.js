@@ -316,6 +316,48 @@ let getDetailUserById = (userid) => {
         }
     })
 }
+
+let handleSendVerifyEmailUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data.id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            } else {
+                let user = await db.User.findOne({
+                    where: { id: data.id },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    raw: false
+                })
+
+                if (user) {
+                    let token = uuidv4();
+                    user.usertoken = token;
+                    await emailService.sendSimpleEmail({
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        redirectLink: buildUrlEmail(token, user.id),
+                        email: user.email,
+                        type: 'verifyEmail'
+                    })
+                    await user.save();
+
+                }
+                resolve({
+                    errCode: 0,
+                    errMessage: 'ok'
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -324,4 +366,5 @@ module.exports = {
     handleChangePassword: handleChangePassword,
     getAllUser: getAllUser,
     getDetailUserById: getDetailUserById,
+    handleSendVerifyEmailUser: handleSendVerifyEmailUser,
 }
