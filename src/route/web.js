@@ -13,6 +13,7 @@ let initwebRoutes = (app) => {
     router.delete('/api/delete-user', middlewareControllers.verifyTokenAdmin, userController.handleDeleteUser)
     router.post('/api/login', userController.handleLogin)
     router.post('/api/changepassword', middlewareControllers.verifyTokenUser, userController.handleChangePassword)
+    router.get('/api/get-all-user', middlewareControllers.verifyTokenAdmin, userController.getAllUser)
     return app.use("/", router);
 }
 
