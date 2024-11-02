@@ -521,6 +521,30 @@ let checkPhonenumberEmail = (data) => {
         }
     })
 }
+let getDetailUserByEmail = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!email) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameters!'
+                })
+            } else {
+                let res = await db.User.findOne({
+                    where: { id: userid, statusId: 'S1' },
+                    attributes: ['password']
+
+                })
+                resolve({
+                    errCode: 0,
+                    data: res
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -534,4 +558,5 @@ module.exports = {
     handleSendEmailForgotPassword: handleSendEmailForgotPassword,
     handleForgotPassword: handleForgotPassword,
     checkPhonenumberEmail: checkPhonenumberEmail,
+    getDetailUserByEmail: getDetailUserByEmail
 }
