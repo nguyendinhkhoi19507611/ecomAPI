@@ -2,6 +2,7 @@ import express from "express";
 import middlewareControllers from '../middlewares/jwtVerify';
 import userController from '../controllers/userController';
 import allcodeController from '../controllers/allcodeController';
+import productController from '../controllers/productController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -30,6 +31,33 @@ let initwebRoutes = (app) => {
       router.get('/api/get-list-allcode', allcodeController.getListAllCodeService)
       router.get('/api/get-detail-all-code-by-id', allcodeController.getDetailAllCodeById)
       router.get('/api/get-all-category-blog', allcodeController.getAllCategoryBlog)
+      //==================API PRODUCT=========================//
+    router.post('/api/create-new-product', middlewareControllers.verifyTokenAdmin, productController.createNewProduct)
+    router.put('/api/update-product', middlewareControllers.verifyTokenAdmin, productController.updateProduct)
+    router.get('/api/get-all-product-admin', middlewareControllers.verifyTokenAdmin, productController.getAllProductAdmin)
+    router.get('/api/get-all-product-user', productController.getAllProductUser)
+    router.post('/api/unactive-product', middlewareControllers.verifyTokenAdmin, productController.UnactiveProduct)
+    router.post('/api/active-product', middlewareControllers.verifyTokenAdmin, productController.ActiveProduct)
+    router.get('/api/get-detail-product-by-id', productController.getDetailProductById)
+    router.get('/api/get-all-product-detail-by-id', productController.getAllProductDetailById)
+    router.get('/api/get-all-product-detail-image-by-id', productController.getAllProductDetailImageById)
+    router.post('/api/create-new-product-detail', middlewareControllers.verifyTokenAdmin, productController.createNewProductDetail)
+    router.put('/api/update-product-detail', middlewareControllers.verifyTokenAdmin, productController.updateProductDetail)
+    router.get('/api/get-product-detail-by-id', productController.getDetailProductDetailById)
+    router.post('/api/create-product-detail-image', middlewareControllers.verifyTokenAdmin, productController.createNewProductDetailImage)
+    router.get('/api/get-product-detail-image-by-id', productController.getDetailProductImageById)
+    router.put('/api/update-product-detail-image', middlewareControllers.verifyTokenAdmin, productController.updateProductDetailImage)
+    router.delete('/api/delete-product-detail-image', middlewareControllers.verifyTokenAdmin, productController.deleteProductDetailImage)
+    router.delete('/api/delete-product-detail', middlewareControllers.verifyTokenAdmin, productController.deleteProductDetail)
+    router.get('/api/get-all-product-detail-size-by-id', productController.getAllProductDetailSizeById)
+    router.post('/api/create-product-detail-size', middlewareControllers.verifyTokenAdmin, productController.createNewProductDetailSize)
+    router.get('/api/get-detail-product-detail-size-by-id', productController.getDetailProductDetailSizeById)
+    router.put('/api/update-product-detail-size', middlewareControllers.verifyTokenAdmin, productController.updateProductDetailSize)
+    router.delete('/api/delete-product-detail-size', middlewareControllers.verifyTokenAdmin, productController.deleteProductDetailSize)
+    router.get('/api/get-product-feature', productController.getProductFeature)
+    router.get('/api/get-product-new', productController.getProductNew)
+    router.get('/api/get-product-shopcart', productController.getProductShopCart)
+    router.get('/api/get-product-recommend', productController.getProductRecommend)
     return app.use("/", router);
 }
 
