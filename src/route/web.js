@@ -10,6 +10,7 @@ let initwebRoutes = (app) => {
     //=====================API USER==========================//
     router.post('/api/create-new-user', userController.handleCreateNewUser)
     router.put('/api/update-user', middlewareControllers.verifyTokenUser, userController.handleUpdateUser)
+    router.delete('/api/delete-user', middlewareControllers.verifyTokenAdmin, userController.handleDeleteUser)
     return app.use("/", router);
 }
 

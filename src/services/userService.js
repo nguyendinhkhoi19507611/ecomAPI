@@ -127,7 +127,41 @@ let updateUserData = (data) => {
         }
     })
 }
+let deleteUser = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!userId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: `Missing required parameters !`
+                })
+            } else {
+                let foundUser = await db.User.findOne({
+                    where: { id: userId }
+                })
+                if (!foundUser) {
+                    resolve({
+                        errCode: 2,
+                        errMessage: `The user isn't exist`
+                    })
+                }
+                await db.User.destroy({
+                    where: { id: userId }
+                })
+                resolve({
+                    errCode: 0,
+                    message: `The user is deleted`
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
+    deleteUser: deleteUser,
 }
