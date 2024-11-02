@@ -401,6 +401,57 @@ let handleVerifyEmailUser = (data) => {
         }
     })
 }
+let handleSendEmailForgotPassword = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!email) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter!'
+                })
+            } else {
+                let check = await checkUserEmail(email)
+                if (check === true) {
+                    let user = await db.User.findOne({
+                        where: { email: email },
+                        attributes: {
+                            exclude: ['password']
+                        },
+                        raw: false
+                    })
+
+                    if (user) {
+                        let token = uuidv4();
+                        user.usertoken = token;
+                        await emailService.sendSimpleEmail({
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            redirectLink: `${process.env.URL_REACT}/verify-forgotpassword?token=${token}&userId=${user.id}`,
+                            email: user.email,
+                            type: 'forgotpassword'
+                        })
+                        await user.save();
+
+                    }
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'ok'
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: `Your's email isn't exist in your system. plz try other email`
+                    })
+                }
+
+
+
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -411,4 +462,5 @@ module.exports = {
     getDetailUserById: getDetailUserById,
     handleSendVerifyEmailUser: handleSendVerifyEmailUser,
     handleVerifyEmailUser: handleVerifyEmailUser,
+    handleSendEmailForgotPassword: handleSendEmailForgotPassword,
 }
