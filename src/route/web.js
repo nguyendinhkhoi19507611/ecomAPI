@@ -9,6 +9,7 @@ import typeshipController from '../controllers/typeshipController';
 import voucherController from '../controllers/voucherController';
 import commentController from '../controllers/commentController';
 import shopCartController from '../controllers/shopCartController';
+import orderController from '../controllers/orderController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -108,6 +109,20 @@ let initwebRoutes = (app) => {
     router.post('/api/add-shopcart', middlewareControllers.verifyTokenUser, shopCartController.addShopCart)
     router.get('/api/get-all-shopcart-by-userId', middlewareControllers.verifyTokenUser, shopCartController.getAllShopCartByUserId)
     router.delete('/api/delete-item-shopcart', middlewareControllers.verifyTokenUser, shopCartController.deleteItemShopCart)
+     //=================API ORDER=============================//
+     router.post('/api/create-new-order', middlewareControllers.verifyTokenUser, orderController.createNewOrder)
+     router.get('/api/get-all-order', orderController.getAllOrders)
+     router.get('/api/get-detail-order', orderController.getDetailOrderById)
+     router.put('/api/update-status-order', middlewareControllers.verifyTokenUser, orderController.updateStatusOrder)
+     router.get('/api/get-all-order-by-user', middlewareControllers.verifyTokenUser, orderController.getAllOrdersByUser)
+     router.post('/api/payment-order', middlewareControllers.verifyTokenUser, orderController.paymentOrder)
+     router.post('/api/payment-order-success', middlewareControllers.verifyTokenUser, orderController.paymentOrderSuccess)
+     router.post('/api/payment-order-vnpay-success', middlewareControllers.verifyTokenUser, orderController.paymentOrderVnpaySuccess)
+     router.put('/api/confirm-order', orderController.confirmOrder)
+     router.get('/api/get-all-order-by-shipper', orderController.getAllOrdersByShipper)
+     router.post('/api/payment-order-vnpay', middlewareControllers.verifyTokenUser, orderController.paymentOrderVnpay)
+     router.post('/api/vnpay_return', orderController.confirmOrderVnpay)
+     router.put('/api/update-image-order', orderController.updateImageOrder)
     return app.use("/", router);
 }
 
