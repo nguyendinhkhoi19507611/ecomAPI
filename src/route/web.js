@@ -12,6 +12,7 @@ let initwebRoutes = (app) => {
     router.put('/api/update-user', middlewareControllers.verifyTokenUser, userController.handleUpdateUser)
     router.delete('/api/delete-user', middlewareControllers.verifyTokenAdmin, userController.handleDeleteUser)
     router.post('/api/login', userController.handleLogin)
+    router.post('/api/changepassword', middlewareControllers.verifyTokenUser, userController.handleChangePassword)
     return app.use("/", router);
 }
 
