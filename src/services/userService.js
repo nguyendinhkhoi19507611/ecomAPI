@@ -282,6 +282,40 @@ let getAllUser = (data) => {
         }
     })
 }
+let getDetailUserById = (userid) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!userid) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameters!'
+                })
+            } else {
+                let res = await db.User.findOne({
+                    where: { id: userid, statusId: 'S1' },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    include: [
+                        { model: db.Allcode, as: 'roleData', attributes: ['value', 'code'] },
+                        { model: db.Allcode, as: 'genderData', attributes: ['value', 'code'] },
+                    ],
+                    raw: true,
+                    nest: true
+                })
+                if (res.image) {
+                    res.image = new Buffer(res.image, 'base64').toString('binary');
+                }
+                resolve({
+                    errCode: 0,
+                    data: res
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     updateUserData: updateUserData,
@@ -289,4 +323,5 @@ module.exports = {
     handleLogin: handleLogin,
     handleChangePassword: handleChangePassword,
     getAllUser: getAllUser,
+    getDetailUserById: getDetailUserById,
 }

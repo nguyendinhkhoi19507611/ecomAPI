@@ -72,6 +72,18 @@ let getAllUser = async (req, res) => {
         })
     }
 }
+let getDetailUserById = async (req, res) => {
+    try {
+        let data = await userService.getDetailUserById(req.query.id);
+        return res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
     handleUpdateUser: handleUpdateUser,
@@ -79,4 +91,5 @@ module.exports = {
     handleLogin: handleLogin,
     handleChangePassword: handleChangePassword,
     getAllUser: getAllUser,
+    getDetailUserById: getDetailUserById,
 }
