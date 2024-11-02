@@ -85,8 +85,49 @@ let handleCreateNewUser = (data) => {
     })
 }
 
+let updateUserData = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id || !data.genderId) {
+                resolve({
+                    errCode: 2,
+                    errMessage: `Missing required parameters`
+                })
+            } else {
+                let user = await db.User.findOne({
+                    where: { id: data.id },
+                    raw: false
+                })
+                if (user) {
+                    user.firstName = data.firstName
+                    user.lastName = data.lastName
+                    user.address = data.address
+                    user.roleId = data.roleId
+                    user.genderId = data.genderId
+                    user.phonenumber = data.phonenumber
+                    user.dob = data.dob
+                    if (data.image) {
+                        user.image = data.image
+                    }
+                    await user.save();
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Update the user succeeds!'
+                    })
+                } else {
+                    resolve({
+                        errCode: 1,
+                        errMessage: 'User not found!'
+                    })
+                }
+            }
 
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 module.exports = {
     handleCreateNewUser: handleCreateNewUser,
-
+    updateUserData: updateUserData,
 }
