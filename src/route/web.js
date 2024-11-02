@@ -10,6 +10,7 @@ import voucherController from '../controllers/voucherController';
 import commentController from '../controllers/commentController';
 import shopCartController from '../controllers/shopCartController';
 import orderController from '../controllers/orderController';
+import addressUserController from '../controllers/addressUserController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -123,6 +124,12 @@ let initwebRoutes = (app) => {
      router.post('/api/payment-order-vnpay', middlewareControllers.verifyTokenUser, orderController.paymentOrderVnpay)
      router.post('/api/vnpay_return', orderController.confirmOrderVnpay)
      router.put('/api/update-image-order', orderController.updateImageOrder)
+      //=================API ADDRESS USER ======================//
+    router.post('/api/create-new-address-user', middlewareControllers.verifyTokenUser, addressUserController.createNewAddressUser)
+    router.get('/api/get-all-address-user', middlewareControllers.verifyTokenUser, addressUserController.getAllAddressUserByUserId)
+    router.delete('/api/delete-address-user', middlewareControllers.verifyTokenUser, addressUserController.deleteAddressUser)
+    router.put('/api/edit-address-user', middlewareControllers.verifyTokenUser, addressUserController.editAddressUser)
+    router.get('/api/get-detail-address-user-by-id', middlewareControllers.verifyTokenUser, addressUserController.getDetailAddressUserById)
     return app.use("/", router);
 }
 
