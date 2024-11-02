@@ -1,6 +1,7 @@
 import express from "express";
 import middlewareControllers from '../middlewares/jwtVerify';
 import userController from '../controllers/userController';
+import allcodeController from '../controllers/allcodeController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -21,6 +22,14 @@ let initwebRoutes = (app) => {
     router.post('/api/forgotpassword-email', userController.handleForgotPassword)
     router.get('/api/check-phonenumber-email', userController.checkPhonenumberEmail)
     router.get('/api/get-detail-user-by-email', userController.getDetailUserByEmail)
+      //===================API ALLCODE========================//
+      router.post('/api/create-new-all-code', middlewareControllers.verifyTokenAdmin, allcodeController.handleCreateNewAllCode)
+      router.put('/api/update-all-code', middlewareControllers.verifyTokenAdmin, allcodeController.handleUpdateAllCode)
+      router.delete('/api/delete-all-code', middlewareControllers.verifyTokenAdmin, allcodeController.handleDeleteAllCode)
+      router.get('/api/get-all-code', allcodeController.getAllCodeService)
+      router.get('/api/get-list-allcode', allcodeController.getListAllCodeService)
+      router.get('/api/get-detail-all-code-by-id', allcodeController.getDetailAllCodeById)
+      router.get('/api/get-all-category-blog', allcodeController.getAllCategoryBlog)
     return app.use("/", router);
 }
 
