@@ -13,6 +13,7 @@ import orderController from '../controllers/orderController';
 import addressUserController from '../controllers/addressUserController';
 import messageController from '../controllers/messageController';
 import statisticController from '../controllers/statisticController';
+import supplierController from '../controllers/supplierController';
 let router = express.Router();
 
 let initwebRoutes = (app) => {
@@ -151,6 +152,12 @@ let initwebRoutes = (app) => {
     router.get('/api/get-statistic-overturn', middlewareControllers.verifyTokenAdmin, statisticController.getStatisticOverturn)
     router.get('/api/get-statistic-profit', middlewareControllers.verifyTokenAdmin, statisticController.getStatisticProfit)
     router.get('/api/get-statistic-stock-product', middlewareControllers.verifyTokenAdmin, statisticController.getStatisticStockProduct)
+      //=================API SUPPLIER================================//
+    router.post('/api/create-new-supplier', middlewareControllers.verifyTokenAdmin, supplierController.createNewSupplier)
+    router.get('/api/get-detail-supplier', supplierController.getDetailSupplierById)
+    router.get('/api/get-all-supplier', supplierController.getAllSupplier)
+    router.put('/api/update-supplier', middlewareControllers.verifyTokenAdmin, supplierController.updateSupplier)
+    router.delete('/api/delete-supplier', middlewareControllers.verifyTokenAdmin, supplierController.deleteSupplier)
     return app.use("/", router);
 }
 
